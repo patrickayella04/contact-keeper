@@ -7,7 +7,8 @@ const app = express();
 
 // Add an end point
 app.get('/', (req, res) =>
-    res.json({ msg: 'Welcome to the ContactKeeper API...' });
+    res.json({ msg: 'Welcome to the ContactKeeper API...' })
+);
 
 // Then this app object will have app listen method which will take in a PORT to listen on. We create a variable for the port so we can have to places to find our port. Once for production  and one for development. Port 5000 will be for development, where as with env.PORT it will look for an environment variable called  PORT first which will be used inn production...but we say OR (||) and say we can use any port we want i.e. 5000.
 
