@@ -1,9 +1,16 @@
 // If you've never used express as a backend technology, we cannot use the import syntax without implementing i.e. bable or typscrypt. Otherwise we must use this syntaxt i.e. const express = require('express');, to bring in moduals, which is call Common JS. When we use React, it acutally uses ES 2015 moduals or ES6 moduals which is this current import sysntax we are using. 
 const express = require('express');
+// Connect Database
+const connectDB = require('./config/db');
 
 // Initialise express into a variable called app
 
 const app = express();
+
+// Connect Database
+connectDB();
+
+
 
 // Add an end point
 app.get('/', (req, res) =>
