@@ -12,6 +12,8 @@ connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false })); // By adding middleware, now we can accept data( or body data for the req.body). 
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 
 
 

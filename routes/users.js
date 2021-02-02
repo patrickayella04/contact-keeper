@@ -8,21 +8,27 @@ const User = require('../models/User');
 //@route   POST api/users(this is an endpoint respresented as '/' in the router.post below)
 //@desc    Register a user
 //@access  Public
-router.post('/', [
-    body('name', 'Please add name')
-        .not()
-        .isEmpty(), 
-    body('email', 'Please include a valid email').isEmail(), 
-    body('password', 'Please enter a password with 6 or more characters').isLength({ min: 6  })
-],
+router.post(
+    '/',
+    
+        body('name', 'Please add name')
+            .not()
+            .isEmpty(), 
+        body('email', 'Please include a valid email').isEmail(), 
+        body('password', 'Please enter a password with 6 or more characters')
+        .isLength({ min: 6 })
+,
     (req, res) => { // we add an endpoint/url
     //res.send(req.body); // In order to use req.body we need to add a piece of middleware to our server.js.
         const errors = validationResult(req);
+        console.log(errors)
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
-        }
-
+        } 
+        
         res.send('passed');
+       
+
     }
 );
 
