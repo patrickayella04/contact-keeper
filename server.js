@@ -22,7 +22,7 @@ app.use('/api/users', require('./routes/users')); //
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/contacts', require('./routes/contacts'));
 
-// Then this app object will have app listen method which will take in a PORT to listen on. We create a variable for the port so we can have to places to find our port. Once for production  and one for development. Port 5000 will be for development, where as with env.PORT it will look for an environment variable called  PORT first which will be used inn production...but we say OR (||) and say we can use any port we want i.e. 5000.
+// Then this app object will have app listen method which will take in a PORT to listen on. We create a variable for the port so we can have two places to find our port. One for production and one for development. Port 5000 will be for development, where as with env.PORT it will look for an environment variable called  PORT first which will be used inn production...but we say OR (||) and say we can use any port we want i.e. 5000.
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
