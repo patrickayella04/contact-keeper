@@ -18,7 +18,7 @@ router.post(
         body('password', 'Please enter a password with 6 or more characters')
         .isLength({ min: 6 })
 ,
-    (req, res) => { // we add an endpoint/url
+    async (req, res) => { // we add an endpoint/url
     //res.send(req.body); // In order to use req.body we need to add a piece of middleware to our server.js.
         const errors = validationResult(req);
         console.log(errors)
@@ -26,7 +26,36 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         } 
         
-        res.send('passed');
+        const { name, email, password } = req.body
+        
+        try {
+            let user = await User.findOne({ email });
+
+            if (user) {
+                return res.status(400).json({ msg: 'User already exists' });
+            }
+            user = new User({
+                name,
+                email,
+                password
+            });
+
+            // encrypt password/ hass password with bcrypt
+            const salt = await bcrypt.genSalt(10); // determins how secure salt is.Then we take that salt and hash the password.
+
+            user.password = await bcrypt.hash(password, salt) // this gives use a hashed version of the user.password which we are then asigning to the user object above. 
+
+            // to save it to the database 
+            await user.save();
+
+
+            res.send('User saved');
+
+
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
        
 
     }
