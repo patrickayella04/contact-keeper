@@ -10,6 +10,9 @@ const app = express();
 // Connect Database
 connectDB();
 
+// Init Middleware
+app.use(express.json({ extended: false })); // By adding middleware, now we can accept data( or body data for the req.body). 
+
 
 
 // Add an end point
