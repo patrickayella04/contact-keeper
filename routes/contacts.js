@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const { body, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const Contact = require('../models/Contact')
@@ -11,7 +11,7 @@ const Contact = require('../models/Contact')
 //@route   Get api/contacts
 //@desc    Get all users contacts
 //@access  Private - you have to be logged in to get them
-router.get('/',auth,(req, res) => { // we add an endpoint/url
+router.get('/',auth, async (req, res) => { // we add an endpoint/url
     try { 
         // We find contacts array based on user type id. Then we sort contacts by most recent using -1.
         const contacts = await Contact.find({ user: req.user.id }).sort({ date: -1 }); 
@@ -28,9 +28,42 @@ router.get('/',auth,(req, res) => { // we add an endpoint/url
 //@route   POST api/contacts
 //@desc    Add new contact
 //@access  Private - you have to be logged in to get them
-router.post('/',(req, res) => { // we add an endpoint/url
-    res.send('Add contact');
-});
+router.post('/',
+    [
+    auth,
+        [
+            check('name', 'Name is required')
+                .not()
+                .isEmpty()
+        ]
+    ],
+    async (req, res) => { // we add an endpoint/url
+        const errors = validationResult(req);
+        console.log(errors)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        } 
+        const { name, email, phone, type } = req.body;
+
+        try {
+            const newContact = new Contact({
+                name,
+                email,
+                phone,
+                type,
+                user: req.user.id
+            });
+
+            // Save new instance of contact in data base
+            const contact = await newContact.saved();
+
+            res.json(contact);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
+);
 
 // For PUT we have identify which contact we update with id.
 //@route   PUT api/contacts/:id 
