@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const config = require('config');
 const { body, validationResult } = require('express-validator');
 
 const User = require('../models/User');
@@ -30,7 +31,7 @@ router.post(
         
         const { name, email, password } = req.body
         
-        try {
+        try { // see if email exists already (findOne())
             let user = await User.findOne({ email });
 
             if (user) {
@@ -50,8 +51,23 @@ router.post(
             // to save it to the database 
             await user.save();
 
+            // payload is the object we want to send in the token (jwt)
+            const payload = {
+                user: {
+                    id: user.id // we can access all contacts user has from user id
+                }
+            }
 
-            res.send('User saved');
+            // To generate a token we have to sign it. 
+            jwt.sign(payload, config.get('jwtSecret'), {
+                expiresIn: 360000
+            },
+            
+                (err, token) => {
+                    if (err) throw err;
+                    res.json({ token });
+            }); // Always put secret inside config(check default.json folder)
+
 
 
         } catch (err) {
