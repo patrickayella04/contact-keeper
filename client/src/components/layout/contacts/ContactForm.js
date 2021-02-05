@@ -1,8 +1,23 @@
-import React, { useState, useContext } from 'react'; // Since this a form we will need some component level state(i.e. as we type in the input the state changes).
+import React, { useState, useContext, useEffect } from 'react'; // Since this a form we will need some component level state(i.e. as we type in the input the state changes).
 import ContactContext from '../../../context/contact/contactContext';
 
 const ContactForm = () => {
-    const contactContext = useContext(ContactContext)
+    const contactContext = useContext(ContactContext);
+
+    // We want the form filled out based on if there is anything in the current value. And we want this to run as soon as the form is created or mounted.So we use useEffect hook which will mimic the lifecycle method, componentDidMount.
+    const { addContact, current } = contactContext;
+    useEffect(() => {
+        if (current !== null) {
+            setContact(current);
+        } else {
+            setContact({
+                name: '',
+                email: '',
+                phone: '',
+                type: 'personal'
+            });
+        }
+    }, [contactContext, current]); // We add dependencies, as we only want this to happen on certain occasions- when the contactContext is changed or the current is changed. 
 
     const [contact, setContact] = useState({
         name: '',
@@ -19,7 +34,7 @@ const ContactForm = () => {
     // We add a submit handler to the form so we can connect our form to our context state via a function we create called addContact() which will add a contact when we submit our form values. 
     const onSubmit = e => {
         e.preventDefault();
-        contactContext.addContact(contact);
+        addContact(contact);
         setContact({
             name: '',
             email: '',
