@@ -5,7 +5,7 @@ const ContactForm = () => {
     const contactContext = useContext(ContactContext);
 
     // We want the form filled out based on if there is anything in the current value. And we want this to run as soon as the form is created or mounted.So we use useEffect hook which will mimic the lifecycle method, componentDidMount.
-    const { addContact, current } = contactContext;
+    const { addContact, updateContact, clearCurrent, current } = contactContext; 
     useEffect(() => {
         if (current !== null) {
             setContact(current);
@@ -34,18 +34,28 @@ const ContactForm = () => {
     // We add a submit handler to the form so we can connect our form to our context state via a function we create called addContact() which will add a contact when we submit our form values. 
     const onSubmit = e => {
         e.preventDefault();
-        addContact(contact);
-        setContact({
-            name: '',
-            email: '',
-            phone: '',
-            type: 'personal'
-        });
+        if (current === null) {
+            addContact(contact);
+        } else {
+            updateContact(contact);
+            
+        }
+        clearAll();
+        // setContact({
+        //     name: '',
+        //     email: '',
+        //     phone: '',
+        //     type: 'personal'
+        // });
     };
+
+    const clearAll = () => {
+        clearCurrent();
+    }
 
     return (
         <form onSubmit={onSubmit}>
-            <h2 className="text-primary">Add Contact</h2>
+            <h2 className="text-primary">{current ? 'Edit Contact' : 'Add Contact'}</h2>
             <input
                 type="text"
                 placeholder='Name'
@@ -85,9 +95,13 @@ const ContactForm = () => {
             />{' '}
              Professional
             <div>
-                <input type="submit" value="Add Contact" className="btn btn-primary btn-block"/>
+                <input type="submit"
+                    value={current ? 'Update Contact' : 'Add Contact'}
+                    className="btn btn-primary btn-block" />
             </div>
-            
+            {current && <div>
+                <button className="btn btn-light btn-block"onClick={clearAll}>Clear</button>
+            </div>}
         </form>
     )
 }

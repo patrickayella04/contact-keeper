@@ -15,6 +15,12 @@ export default (state, action) => {
                 ...state,
                 contacts: [...state.contacts, action.payload]
             };
+        case UPDATE_CONTACT:
+            return {
+                ...state,
+                contacts: state.contacts.map(contact => contact.id === action.payload.id ? action.payload : contact
+                )
+            };
         case DELETE_CONTACT:
             return {
                 ...state,
@@ -30,6 +36,19 @@ export default (state, action) => {
                 ...state,
                 current: null
             };
+        case FILTER_CONTACTS:
+            return {
+                ...state,
+                filtered: state.contacts.filter(contact => {
+                    const regex = new RegExp(`${action.payload}`, 'gi'); // we have a paremeter of 'gi' which is globle or insensitive because we want the input to match wether its lowercase or uppercase. 
+                    return contact.name.match(regex) || contact.email.match(regex); // return any name or email that matches the payload aka the regex - regular expression. 
+                })
+            };
+            case CLEAR_FILTER:
+                return {
+                    ...state,
+                    filtered: null
+                };
         default:
             return state;
     }
