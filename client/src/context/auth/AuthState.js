@@ -11,6 +11,7 @@ import {
     LOGOUT,
     CLEAR_ERRORS
 } from '../types';
+// import { response } from 'express';
 
 const  AuthState = props => {
     const initialState = {
@@ -29,27 +30,28 @@ const  AuthState = props => {
     // Register User - sign user up and get a token back
     const register = async formData => {
         const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-    
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
     
         try {
-            const res = await axios.post('/api/users', formData, config);
-
-            dispatch({
-                type: REGISTER_SUCCESS,
-                payload: res.data
-            });
+          const res = await axios.post('/api/users', formData, config);
+    
+          dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res.data
+          });
+    
+          
         } catch (err) {
-            dispatch({
-                type: REGISTER_FAIL,
-                payload: err.response.data.msg
-            });
-        
+          dispatch({
+            type: REGISTER_FAIL,
+            payload: 
+          });
         }
-    };
+      };
+    
     // Login User - log user in and get a token
     const Login = () => console.log('login');
     // Logout - will destroy the token

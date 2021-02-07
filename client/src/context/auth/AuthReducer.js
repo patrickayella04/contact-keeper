@@ -8,6 +8,7 @@ import {
     CLEAR_ERRORS
 } from '../types';
 
+/* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default (state, action) => {
     switch (action.type) {
         case REGISTER_SUCCESS:
