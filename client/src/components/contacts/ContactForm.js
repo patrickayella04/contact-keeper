@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'; // Since this a form we will need some component level state(i.e. as we type in the input the state changes).
-import ContactContext from '../../../context/contact/contactContext';
+import ContactContext from '../../context/contact/contactContext';
 
 const ContactForm = () => {
     const contactContext = useContext(ContactContext);

@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useEffect } from 'react'
-import ContactContext from '../../../context/contact/contactContext'; 
+import ContactContext from '../../context/contact/contactContext'; 
 
 // UseRef hook used to represent or reference a dom object, and an alternative for forms. We are not acutlly going to create a piece of state for our input/filter, we instead use a ref. We want our form to filter right when it changes. 
 export const ContactFilter = () => {
