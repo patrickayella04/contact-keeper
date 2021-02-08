@@ -8,7 +8,8 @@ const Home = () => {
     const authContext = useContext(AuthContext);
     
     useEffect(() => {
-        authContext.LoadUser();
+        // Once we are inside pass login, when we reload the page function below will keep us on the home page.
+        authContext.LoadUser(); 
         // eslint-disable-next-line
     }, []);
     

@@ -7,8 +7,10 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     USER_LOADED,
+    // eslint-disable-next-line
     LOGIN_SUCCESS,
     LOGIN_FAIL,
+    // eslint-disable-next-line
     LOGOUT,
     CLEAR_ERRORS,
     AUTH_ERROR
@@ -76,7 +78,8 @@ const  AuthState = props => {
     const login = async formData => {
         const config = {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+    
           }
         };
     
@@ -84,7 +87,7 @@ const  AuthState = props => {
           const res = await axios.post('/api/auth', formData, config);
     
           dispatch({
-            type: LOGIN_FAIL,
+            type: LOGIN_SUCCESS,
             payload: res.data
           });
           
@@ -92,7 +95,7 @@ const  AuthState = props => {
           
         } catch (err) {
           dispatch({
-            type: REGISTER_FAIL,
+            type: LOGIN_FAIL,
             payload: err.response.data.msg
           });
         }

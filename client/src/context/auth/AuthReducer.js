@@ -4,6 +4,7 @@ import {
     USER_LOADED,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
+    // eslint-disable-next-line
     LOGOUT,
     CLEAR_ERRORS,
     AUTH_ERROR
