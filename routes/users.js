@@ -59,7 +59,10 @@ router.post(
             }
 
             // To generate a token we have to sign it. 
-            jwt.sign(payload, config.get('jwtSecret'), {
+            jwt.sign(
+                payload,
+                config.get('jwtSecret'),
+            {
                 expiresIn: 360000
             },
             

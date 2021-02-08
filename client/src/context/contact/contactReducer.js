@@ -7,7 +7,7 @@ import {
     FILTER_CONTACTS,
     CLEAR_FILTER
 } from '../types';
-
+/* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default (state, action) => {
     switch (action.type) {
         case ADD_CONTACT:
