@@ -18,7 +18,7 @@ import {
 
 const ContactState = props => {
     const initialState = {
-        contacts: [],
+        contacts: null,
         current: null, // when we click edit, the selected piece of state(contact) will be pulled into this current piece of state. And then we can change things in the UI based on this. 
         filtered: null,
         error: null
@@ -45,6 +45,37 @@ const ContactState = props => {
         }
         
     };
+
+    // Update Contact 
+    const updateContact = async contact => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            } // Now remember we're not sending the the token within the header here because we're it's set globally.
+
+            // And that's because of our set auth token file we set that as a global value as long as the token is
+            
+            // in local storage and passed in.
+            
+            // So we don't we don't need to worry about sending it individually.
+        }; 
+
+        try {
+            const res = await axios.put(`/api/contacts/${contact._id}`, contact, config)
+            
+            dispatch({
+                type: UPDATE_CONTACT,
+                payload: res.data
+            });    
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.msg
+            });
+        }
+       
+    }
+
 
     // Add Contact
     const addContact = async contact => {
@@ -79,10 +110,27 @@ const ContactState = props => {
         
 
     // Delete Contact
-    const deleteContact = id => {
+    const deleteContact = async id => {
+        try {
+            await axios.delete(`/api/contacts/${id}`)
+            
+            dispatch({
+                type: DELETE_CONTACT,
+                payload: id
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.msg
+            });
+        }
+        
+    }
+
+    // Clear Contacts
+    const clearContacts = () => {
         dispatch({
-            type: DELETE_CONTACT,
-            payload: id
+            type: CLEAR_CONTACTS
         });
     }
 
@@ -99,15 +147,7 @@ const ContactState = props => {
         dispatch({
             type: CLEAR_CURRENT
         });
-    }
-
-    // Update Contact 
-    const updateContact = contact => {
-        dispatch({
-            type: UPDATE_CONTACT,
-            payload: contact
-        });
-    }
+    };
 
     // Filter Contacts
     const filterContacts = text => {
@@ -139,7 +179,8 @@ const ContactState = props => {
                 clearCurrent,
                 updateContact,
                 filterContacts,
-                clearFilter
+                clearFilter,
+                clearContacts
             }}
         >
             {props.children}
