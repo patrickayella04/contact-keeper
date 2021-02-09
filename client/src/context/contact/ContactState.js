@@ -1,57 +1,80 @@
 import React, { useReducer } from 'react';
-// import uuid from 'uuid';
-import {v4 as uuidv4} from 'uuid';
+import axios from 'axios';
 import contactContext from './contactContext';
 import contactReducer from './contactReducer';
 import {
+    GET_CONTACTS,
     ADD_CONTACT,
     DELETE_CONTACT,
     SET_CURRENT,
     CLEAR_CURRENT,
     UPDATE_CONTACT,
     FILTER_CONTACTS,
-    CLEAR_FILTER
+    // eslint-disable-next-line
+    CLEAR_CONTACTS,
+    CLEAR_FILTER,
+    CONTACT_ERROR
 } from '../types';
 
 const ContactState = props => {
     const initialState = {
-        contacts: [
-            {
-                id: 1,
-                name: "Ted Johnson",
-                email: "ted@gmail.com",
-                phone: "222-222-2222",
-                type: "personal"
-            },
-            {
-                id: 2,
-                name: "Sara Smith",
-                email: "ssmith@gmail.com",
-                phone: "111-111-1111",
-                type: "personal"
-            },
-            {
-                id: 3,
-                name: "Harry White",
-                email: "hwhite@gmail.com",
-                phone: "333-333-3333",
-                type: "professional"
-            }
-
-        ],
+        contacts: [],
         current: null, // when we click edit, the selected piece of state(contact) will be pulled into this current piece of state. And then we can change things in the UI based on this. 
-        filtered: null
+        filtered: null,
+        error: null
     };
 
     const [state, dispatch] = useReducer(contactReducer, initialState);
 
+    // Get Contacts
+    const getContacts = async () => {
+        
+        
+        try {
+            const res = await axios.get('/api/contacts')
+            
+            dispatch({
+                type: GET_CONTACTS,
+                payload: res.data // We'er no longer the direct contact like before, we are sending the respons.data.
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.msg
+            });
+        }
+        
+    };
+
     // Add Contact
-    const addContact = contact => {
-        contact.id = uuidv4();
-        dispatch({
-            type: ADD_CONTACT,
-            payload: contact
-        });
+    const addContact = async contact => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            } // Now remember we're not sending the the token within the header here because we're it's set globally.
+
+            // And that's because of our set auth token file we set that as a global value as long as the token is
+            
+            // in local storage and passed in.
+            
+            // So we don't we don't need to worry about sending it individually.
+        }; 
+
+        try {
+            const res = await axios.post('/api/contacts', contact, config)
+            
+            dispatch({
+                type: ADD_CONTACT,
+                payload: res.data // We'er no longer the direct contact like before, we are sending the respons.data.
+            });    
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.msg
+            });
+        }
+        
     }
         
 
@@ -108,6 +131,8 @@ const ContactState = props => {
                 contacts: state.contacts,
                 current: state.current,
                 filtered: state.filtered,
+                error: state.error,
+                getContacts,
                 addContact,
                 deleteContact,
                 setCurrent,
