@@ -15,7 +15,7 @@ export default (state, action) => {
         case GET_CONTACTS:
             return {
                 ...state,
-                constacts: action.payload,
+                contacts: action.payload,
                 loading: false
             }
         case ADD_CONTACT:

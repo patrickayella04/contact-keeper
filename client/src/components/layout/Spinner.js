@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react' // extension racf creactes arrow function component.
-import spinner from './spinner.gif'
+import React, { Fragment } from 'react'; // extension racf creactes arrow function component.
+import spinner from './spinner.gif';
 
 
 export const Spinner = () =>
